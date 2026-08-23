@@ -1,0 +1,441 @@
+/* ============================================================
+   MangaFlow project page
+
+   Palette follows the University of Tokyo Visual Identity
+   Guidelines (2024-06-20 edition):
+     UTokyo Blue  #0B8BEE  PANTONE 2194C   (school colour, 淡青)
+     UTokyo Yellow #FFCD00 PANTONE 116C
+     Black / White dominate; the accent stays under 25% of the
+     page, per the guideline's colour-ratio rule.
+   Greys are taken from the guideline's own 15-step blue ramp
+   (#010E18 #021C30 #032A47 #04385F #07538F #096FBE #0B8BEE
+    #3CA2F1 #6DB9F5 #9DD1F8 #B6DCFA #CEE8FC #E7F3FD), so every
+   value on this page is an official one.
+   ============================================================ */
+
+:root {
+  --ink:        #021C30;
+  --ink-soft:   #04385F;
+  --ink-faint:  #07538F;
+  --paper:      #ffffff;
+  --paper-2:    #E7F3FD;
+  --rule:       #CEE8FC;
+  --accent:     #0B8BEE;
+  --accent-dim: #E7F3FD;
+  --gold:       #FFCD00;
+  --max:        1080px;
+  --radius:     10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink:        #E7F3FD;
+    --ink-soft:   #B6DCFA;
+    --ink-faint:  #6DB9F5;
+    --paper:      #010E18;
+    --paper-2:    #021C30;
+    --rule:       #04385F;
+    --accent:     #3CA2F1;
+    --accent-dim: #032A47;
+    --gold:       #FFCD00;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+               "Noto Sans", "Noto Sans JP", sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+/* ---------------- header ---------------- */
+
+body::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold) 22%, var(--accent) 22%, var(--accent) 100%);
+}
+
+header {
+  border-bottom: 1px solid var(--rule);
+  padding: 48px 0 40px;
+  text-align: center;
+}
+
+.venue {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 5px 15px;
+  margin-bottom: 22px;
+}
+
+h1 {
+  font-size: clamp(29px, 4.6vw, 46px);
+  line-height: 1.16;
+  letter-spacing: -0.018em;
+  font-weight: 700;
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+
+h1 .sub {
+  display: block;
+  font-size: .62em;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: -0.01em;
+  margin-top: 8px;
+}
+
+.authors {
+  margin: 26px auto 0;
+  max-width: 760px;
+  font-size: 17px;
+  color: var(--ink);
+}
+.authors a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule); }
+.authors a:hover { border-color: var(--accent); color: var(--accent); }
+.authors sup { color: var(--accent); font-weight: 700; font-size: .74em; }
+
+.affil {
+  margin: 12px auto 0;
+  max-width: 700px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.affil sup { color: var(--accent); font-weight: 700; }
+
+/* ---------------- link buttons ---------------- */
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 19px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid var(--accent);
+  transition: transform .12s ease, opacity .12s ease;
+}
+.btn:hover { transform: translateY(-1px); opacity: .88; }
+.btn svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--rule); }
+.btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn.todo {
+  background: var(--paper-2);
+  color: var(--ink-faint);
+  border-color: var(--rule);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ---------------- sections ---------------- */
+
+section { padding: 54px 0; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: 0; }
+
+h2 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+
+h3 {
+  font-size: clamp(21px, 2.6vw, 27px);
+  line-height: 1.28;
+  letter-spacing: -0.014em;
+  font-weight: 680;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+h4 {
+  font-size: 17px;
+  font-weight: 660;
+  margin: 34px 0 10px;
+}
+
+p { margin: 0 0 16px; }
+p.lead { font-size: 18px; color: var(--ink); }
+.muted { color: var(--ink-soft); }
+
+.narrow { max-width: 760px; }
+
+/* ---------------- figures ---------------- */
+
+figure { margin: 0 0 8px; }
+
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: zoom-in;
+}
+
+figcaption {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-top: 12px;
+  max-width: 860px;
+}
+figcaption b { color: var(--ink); font-weight: 640; }
+
+.pages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.pages.two { grid-template-columns: repeat(2, 1fr); }
+
+@media (max-width: 760px) {
+  .pages { grid-template-columns: repeat(2, 1fr); }
+}
+
+.pair-label {
+  font-size: 12.5px;
+  font-weight: 650;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 7px;
+}
+
+/* ---------------- state cards ---------------- */
+
+.states {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.card {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+}
+.card .tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.card b { display: block; margin: 6px 0 6px; font-size: 16.5px; font-weight: 660; }
+.card span { font-size: 14.5px; color: var(--ink-soft); line-height: 1.58; }
+
+/* ---------------- tables ---------------- */
+
+.tablewrap { overflow-x: auto; margin: 20px 0 10px; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 520px;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+caption {
+  caption-side: bottom;
+  text-align: left;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  padding-top: 12px;
+}
+
+th, td { padding: 8px 12px; text-align: right; }
+th:first-child, td:first-child { text-align: left; }
+
+thead th {
+  font-weight: 660;
+  font-size: 14px;
+  color: var(--ink-soft);
+  border-bottom: 1.5px solid var(--ink);
+  white-space: nowrap;
+}
+thead tr.group th {
+  border-bottom: 1px solid var(--rule);
+  text-align: center;
+  color: var(--ink);
+}
+tbody td { border-bottom: 1px solid var(--rule); }
+tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+tbody td.best { font-weight: 700; color: var(--ink); }
+tbody tr.sep td { border-top: 1px solid var(--rule); }
+tbody th { text-align: left; font-weight: 600; padding: 8px 12px; border-bottom: 1px solid var(--rule); }
+
+.note { font-size: 14px; color: var(--ink-soft); margin-top: 10px; }
+.note sup { color: var(--accent); }
+
+/* ---------------- bibtex ---------------- */
+
+pre {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+  color: var(--ink);
+}
+
+/* ---------------- footer ---------------- */
+
+footer {
+  padding: 40px 0 56px;
+  font-size: 14.5px;
+  color: var(--ink-faint);
+  text-align: left;
+}
+footer a { color: var(--ink-soft); }
+
+/* ---------------- lightbox ---------------- */
+
+#lb {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 11, .93);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 90;
+  padding: 24px;
+  cursor: zoom-out;
+}
+#lb.on { display: flex; }
+#lb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #fff;
+}
+#lb .hint {
+  position: absolute;
+  bottom: 16px;
+  left: 0; right: 0;
+  text-align: center;
+  color: rgba(255,255,255,.55);
+  font-size: 13px;
+}
+
+/* ---------------- affiliations (header) ---------------- */
+
+.affils {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 34px;
+}
+
+/* white card in both themes: the supplied logo files are opaque, so a
+   theme-following background would put a white block on a dark page */
+.affils .slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  height: 76px;
+  min-width: 250px;
+  padding: 0 24px;
+  background: #ffffff;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.affils .lockup { height: 40px; width: auto; display: block; }
+.affils .emblem { height: 46px; width: auto; display: block; }
+
+.affils .wordmark { text-align: left; color: #021C30; line-height: 1.25; }
+.affils .wordmark .cn { font-size: 16px; font-weight: 700; letter-spacing: .03em; }
+.affils .wordmark .en {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #04385F;
+}
+
+@media (max-width: 620px) {
+  .affils .slot { min-width: 0; width: 100%; }
+}
+
+/* ---------------- lab block (footer) ---------------- */
+
+.lab {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  text-align: left;
+  margin: 0 0 22px;
+}
+
+.lab img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  display: block;
+  flex: none;
+}
+
+.lab span { font-size: 14px; line-height: 1.5; color: var(--ink-faint); }
+.lab span b {
+  display: block;
+  font-size: 15.5px;
+  font-weight: 660;
+  color: var(--ink-soft);
+  margin-bottom: 1px;
+}
+
+@media (max-width: 520px) {
+  .lab { align-items: flex-start; gap: 12px; }
+}

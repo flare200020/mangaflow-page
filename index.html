@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MangaFlow: Controllable Story to Manga Generation</title>
+<meta name="description" content="MangaFlow is an end-to-end agentic framework for controllable story-to-manga generation, exposing layout, visual references, and lettering as editable intermediate states.">
+<meta property="og:title" content="MangaFlow: An End-to-End Agentic Framework for Controllable Story to Manga Generation">
+<meta property="og:description" content="EMNLP 2026. Layout, visual references, and lettering as explicit, editable intermediate states.">
+<meta property="og:image" content="assets/figures/framework.webp">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="venue">EMNLP 2026</div>
+    <h1>MangaFlow
+      <span class="sub">An End-to-End Agentic Framework for<br>Controllable Story to Manga Generation</span>
+    </h1>
+
+    <p class="authors">
+      Muyao Wang<sup>1</sup>,
+      Zeke Xie<sup>2</sup>,
+      Yanhao Chen<sup>1</sup>,
+      Lixin Xiu<sup>1</sup>,
+      Hideki Nakayama<sup>1</sup>
+    </p>
+    <p class="affil">
+      <sup>1</sup>The University of Tokyo &nbsp;&middot;&nbsp;
+      <sup>2</sup>The Hong Kong University of Science and Technology (Guangzhou)
+    </p>
+
+    <div class="links">
+      <a class="btn" href="https://arxiv.org/abs/2605.28173">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1h5.5L13 4.5V15H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm5 1.2V5h2.8L9 2.2z"/></svg>
+        Paper
+      </a>
+      <a class="btn ghost" href="https://arxiv.org/pdf/2605.28173">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1v8.2l2.6-2.6 1 1L8 12.2 4.4 7.6l1-1L8 9.2V1zM2 13h12v2H2z"/></svg>
+        PDF
+      </a>
+      <a class="btn ghost" href="https://github.com/flare200020/MangaFlow">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.35c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.67.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8 8 0 0 0 8 0z"/></svg>
+        Code
+      </a>
+      <a class="btn ghost" href="#bibtex">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h5v12H2zm7 0h5v12H9z"/></svg>
+        BibTeX
+      </a>
+    </div>
+
+    <div class="affils">
+      <div class="slot">
+        <img class="lockup" src="assets/logos/utokyo.png" alt="The University of Tokyo">
+      </div>
+      <div class="slot">
+        <img class="emblem" src="assets/logos/hkust_gz.png" alt="">
+        <span class="wordmark">
+          <span class="cn">香港科技大学（广州）</span>
+          <span class="en">HKUST (Guangzhou)</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ TEASER ============================ -->
+<section>
+  <div class="wrap">
+    <h2>End-to-end result</h2>
+    <h3>From a story prompt to a finished, lettered manga</h3>
+    <figure>
+      <div class="pages">
+        <img src="assets/figures/demo_p1.webp" alt="Generated manga page 1" loading="eager" decoding="async">
+        <img src="assets/figures/demo_p2.webp" alt="Generated manga page 2" loading="lazy" decoding="async">
+        <img src="assets/figures/demo_p3.webp" alt="Generated manga page 3" loading="lazy" decoding="async">
+        <img src="assets/figures/demo_p4.webp" alt="Generated manga page 4" loading="lazy" decoding="async">
+      </div>
+      <figcaption>
+        <b>Text-to-manga generation by MangaFlow.</b> The generated manga consists of four
+        pages; each page is read from right to left, following the standard manga reading
+        order. Click any figure on this page to enlarge it.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ ABSTRACT ============================ -->
+<section>
+  <div class="wrap">
+   <div class="narrow">
+    <h2>Abstract</h2>
+    <p>
+      End-to-end manga generation is a structured visual storytelling task that requires
+      story decomposition, recurring character and scene grounding, page layout design,
+      panel rendering, page composition, and lettering. However, existing generative
+      models often perform direct page synthesis, entangling these factors in a single
+      visual output and limiting precise control over layout geometry, visual references,
+      and cross-panel consistency.
+    </p>
+    <p>
+      To address these limitations, we propose <b>MangaFlow</b>, an agentic framework for
+      controllable long-form manga generation that decomposes manga creation into planning,
+      grounding, layout construction, reference-conditioned rendering, composition, and
+      text placement. By treating layout and visual references as explicit intermediate
+      variables, MangaFlow enables both simple text-to-manga generation and more precise
+      user-controlled manga creation. This design exposes layout, visual assets, and
+      lettering as editable intermediate controls for refining panel geometry, references,
+      and text placement.
+    </p>
+    <p>
+      To support long-form consistency, MangaFlow introduces a <i>story section memory</i>
+      that links section descriptions with corresponding character, scene, and object
+      references for reuse across panels. We further present a meta-benchmark for
+      evaluating layout controllability, visual consistency, and generation quality.
+      Experiments show that MangaFlow improves layout adherence and cross-panel consistency
+      over direct generation baselines while supporting flexible human control.
+    </p>
+   </div>
+  </div>
+</section>
+
+<!-- ============================ FRAMEWORK ============================ -->
+<section>
+  <div class="wrap">
+    <h2>Framework</h2>
+    <h3>Six stages, five editable intermediate states</h3>
+    <figure>
+      <img src="assets/figures/framework.webp" alt="The MangaFlow framework" loading="lazy" decoding="async">
+      <figcaption>
+        <b>The MangaFlow framework</b> decomposes manga generation into story planning,
+        story-section memory construction, explicit layout control, reference-conditioned
+        panel rendering, page composition, and lettering. MangaFlow takes either a simple
+        story prompt or additional user-specified conditions &mdash; a detailed story JSON
+        file, reference images for characters, scenes and key objects, and target page
+        layouts &mdash; to enable more precise and controllable manga generation.
+      </figcaption>
+    </figure>
+
+    <h4>Why these intermediate states</h4>
+    <p class="muted narrow">
+      Each intermediate state is chosen to isolate one manga-specific control factor that
+      direct page generation tends to entangle.
+    </p>
+    <div class="states">
+      <div class="card">
+        <div class="tag">Narrative decomposition</div>
+        <b>Story / page&ndash;panel plan</b>
+        <span>Assigns story events to pages and panels. Direct generation may skip, merge, or misplace events.</span>
+      </div>
+      <div class="card">
+        <div class="tag">Long-range consistency</div>
+        <b>Story Section Memory</b>
+        <span>Reuses character, scene and object information within coherent story sections. Long prompts otherwise cause drift.</span>
+      </div>
+      <div class="card">
+        <div class="tag">Panel geometry</div>
+        <b>Explicit layout</b>
+        <span>Represents layouts as concrete panel regions for deterministic composition, instead of wrong panel counts or distorted boundaries.</span>
+      </div>
+      <div class="card">
+        <div class="tag">Visual grounding</div>
+        <b>Visual references</b>
+        <span>Provides reusable character, scene and object references. Text-only descriptions may not preserve fine-grained identity.</span>
+      </div>
+      <div class="card">
+        <div class="tag">Readability</div>
+        <b>Lettering representation</b>
+        <span>Separates dialogue and narration placement from image rendering, avoiding missing or unreadable text.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ LAYOUT CONTROL ============================ -->
+<section>
+  <div class="wrap">
+    <h2>Layout controllability</h2>
+    <h3>Following a specified layout, panel for panel</h3>
+    <figure>
+      <div class="pages two">
+        <img src="assets/figures/layout_p1.webp" alt="Layout-controlled generation, example 1" loading="lazy" decoding="async">
+        <img src="assets/figures/layout_p2.webp" alt="Layout-controlled generation, example 2" loading="lazy" decoding="async">
+      </div>
+      <figcaption>
+        For each example, the left side visualizes the specified target layout together with
+        the prompt assigned to each panel, the middle shows a direct page generation result,
+        and the right side shows MangaFlow. Although the direct method receives the same
+        layout and panel-level prompts, it may fail to preserve the required panel count or
+        panel geometry, while <b>MangaFlow follows the explicit layout through deterministic
+        page composition</b>.
+      </figcaption>
+    </figure>
+
+    <h4>Reusing a layout extracted from a reference page</h4>
+    <figure>
+      <img src="assets/figures/reference_layout.webp" alt="Reference-layout-guided generation" loading="lazy" decoding="async">
+      <figcaption>
+        Each example contains a reference manga layout, a direct generation result and the
+        MangaFlow result. Direct page generation may fail to preserve the reference panel
+        structure even when the reference image is provided in the prompt, while MangaFlow
+        explicitly reuses the extracted layout and generates new pages with more faithful
+        panel arrangements.
+      </figcaption>
+    </figure>
+
+    <h4>Layout self-reflection</h4>
+    <figure>
+      <img src="assets/figures/self_reflection.webp" alt="Layout self-reflection" loading="lazy" decoding="async">
+      <figcaption>
+        In each pair the left page uses the original layout and the right page uses the
+        self-refined layout. The reflected layouts better balance panel allocation and
+        page-space usage while preserving the original story content.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ CONSISTENCY ============================ -->
+<section>
+  <div class="wrap">
+    <h2>Long-range consistency</h2>
+    <h3>Story Section Memory across panels and pages</h3>
+    <figure>
+      <div class="pages">
+        <img src="assets/figures/memory_p1.webp" alt="Story Section Memory page 1" loading="lazy" decoding="async">
+        <img src="assets/figures/memory_p2.webp" alt="Story Section Memory page 2" loading="lazy" decoding="async">
+        <img src="assets/figures/memory_p3.webp" alt="Story Section Memory page 3" loading="lazy" decoding="async">
+        <img src="assets/figures/memory_p4.webp" alt="Story Section Memory page 4" loading="lazy" decoding="async">
+      </div>
+      <figcaption>
+        MangaFlow maintains consistent recurring characters, scenes and key objects across
+        panels and pages by reusing section-level textual and visual references.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ RENDERER ============================ -->
+<section>
+  <div class="wrap">
+    <h2>Renderer-agnostic pipeline</h2>
+    <h3>Same plan, memory, layout and composition &mdash; different backbone</h3>
+    <figure>
+      <div class="pages">
+        <div>
+          <p class="pair-label">FLUX.2 &middot; page 1</p>
+          <img src="assets/figures/render_flux2_p1.webp" alt="FLUX.2 render, page 1" loading="lazy" decoding="async">
+        </div>
+        <div>
+          <p class="pair-label">FLUX.2 &middot; page 2</p>
+          <img src="assets/figures/render_flux2_p2.webp" alt="FLUX.2 render, page 2" loading="lazy" decoding="async">
+        </div>
+        <div>
+          <p class="pair-label">Gemini &middot; page 1</p>
+          <img src="assets/figures/render_nano_p1.webp" alt="Gemini render, page 1" loading="lazy" decoding="async">
+        </div>
+        <div>
+          <p class="pair-label">Gemini &middot; page 2</p>
+          <img src="assets/figures/render_nano_p2.webp" alt="Gemini render, page 2" loading="lazy" decoding="async">
+        </div>
+      </div>
+      <figcaption>
+        The same story plan, story-section memory, layout and page composition are used,
+        while the renderer is changed between FLUX.2 and Gemini 2.5 Flash Image. Because
+        layout and composition are explicit and deterministic, the layout metrics are
+        identical for both and only the panel appearance changes.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ EDITING ============================ -->
+<section>
+  <div class="wrap">
+    <h2>Editable intermediate states</h2>
+    <h3>Edit a variable, and only that variable changes</h3>
+    <p class="muted narrow">
+      Layout, visual references and text placement are explicit inputs to the downstream
+      operators, so editing them changes the result by construction rather than by
+      re-prompting.
+    </p>
+
+    <figure>
+      <img src="assets/figures/edit_visual_reference.webp" alt="Editing a visual reference" loading="lazy" decoding="async">
+      <figcaption>
+        <b>Editing a visual reference.</b> Only the panel-level reference is edited, so that
+        Tom replaces Aunt Polly while the room and composition are preserved. FLUX rerenders
+        that panel from the edited reference; every other panel is copied unchanged from the
+        original page.
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img src="assets/figures/edit_lettering.webp" alt="Editing the lettering representation" loading="lazy" decoding="async">
+      <figcaption>
+        <b>Editing the lettering representation.</b> Changing the text content and bubble
+        coordinates and recompositing the page changes the lettering exactly as specified,
+        leaving the panel artwork untouched.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ BIBTEX ============================ -->
+<section id="bibtex">
+  <div class="wrap">
+    <h2>BibTeX</h2>
+    <pre>@inproceedings{wang2026mangaflow,
+  title     = {MangaFlow: An End-to-End Agentic Framework for
+               Controllable Story to Manga Generation},
+  author    = {Wang, Muyao and Xie, Zeke and Chen, Yanhao and
+               Xiu, Lixin and Nakayama, Hideki},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods
+               in Natural Language Processing (EMNLP)},
+  year      = {2026}
+}</pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="lab">
+      <img src="assets/logos/nakayama_lab.png" alt="Machine Perception Group">
+      <span>
+        <b>Machine Perception Group</b>
+        Graduate School of Information Science and Technology,<br>
+        The University of Tokyo
+      </span>
+    </div>
+    <p>
+      MangaFlow builds on
+      <a href="https://vistorybench.github.io/">ViStoryBench</a> for its story-level data
+      and inherited metrics.
+    </p>
+    <p>Generated manga on this page is research output and is shown for evaluation purposes.</p>
+  </div>
+</footer>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Enlarged figure">
+  <img alt="">
+  <div class="hint">click anywhere or press Esc to close</div>
+</div>
+
+<script>
+(function () {
+  var lb = document.getElementById('lb');
+  var lbImg = lb.querySelector('img');
+
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.tagName === 'IMG' && t.closest('figure') && !lb.contains(t)) {
+      lbImg.src = t.currentSrc || t.src;
+      lbImg.alt = t.alt || '';
+      lb.classList.add('on');
+      document.body.style.overflow = 'hidden';
+      return;
+    }
+    if (lb.classList.contains('on')) {
+      lb.classList.remove('on');
+      lbImg.removeAttribute('src');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lb.classList.contains('on')) {
+      lb.classList.remove('on');
+      lbImg.removeAttribute('src');
+      document.body.style.overflow = '';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
